@@ -9,7 +9,7 @@ async function getCloudRunData() {
   const run = new RunServiceClient({ authClient: await auth.getClient() });
 
   // Replace with your project IDs or use logic to fetch them
-  const projects = ['YOUR_PROJECT_ID_1', 'YOUR_PROJECT_ID_2']; 
+  const projects = [bw-cbv2-sample-2]; 
 
   let totalInstances = 0;
   let totalProjects = 0;
