@@ -1,7 +1,7 @@
 FROM node:18-alpine
 
 # Install dependencies
-RUN npm install @google-cloud/run googleapis
+RUN npm install @google-cloud/run googleapis @google-cloud/secret-manager
 
 # Copy application files
 COPY package.json .
