@@ -12,5 +12,7 @@ steps:
     - --image=gcr.io/$PROJECT_ID/cloud-run-tracker:$COMMIT_SHA
     - --region=YOUR_REGION
     - --project=$PROJECT_ID
+    - --update-env-vars=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
+    - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
 images:
 - 'gcr.io/$PROJECT_ID/cloud-run-tracker:$COMMIT_SHA'
