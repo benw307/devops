@@ -16,3 +16,6 @@ steps:
     - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
 images:
 - 'gcr.io/$PROJECT_ID/cloud-run-tracker:$COMMIT_SHA'
+options:
+  logging: GCS_ONLY # or leave as the default if you also want Cloud Logging
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # This is the key change
