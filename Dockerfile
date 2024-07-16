@@ -1,17 +1,19 @@
-FROM node:18-alpine
+# Stage 1: Install dependencies
+FROM node:18-alpine AS build
 
-# Clear npm cache
-RUN npm cache clean --force 
+RUN rm -rf /root/.npm/_cacache
+WORKDIR /app
 
-# Install dependencies
-RUN npm install @google-cloud/run googleapis @google-cloud/secret-manager
-
-# Copy application files
 COPY package.json .
+COPY package-lock.json .
+RUN npm install
+
+# Stage 2: Build the final image
+FROM node:18-alpine
+WORKDIR /app
+
+COPY --from=build /app/node_modules ./node_modules
 COPY index.js .
 
-# Expose the port your app will run on
 EXPOSE 8080
-
-# Start the application
 CMD ["node", "index.js"]
