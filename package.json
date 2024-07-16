@@ -7,8 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@google-cloud/run": "^3.2.0",
-    "googleapis": "^108.0.0",
-    "@google-cloud/secret-manager": "^4.2.0"
+    "@google-cloud/run": "3.1.2",    // Updated version
+    "googleapis": "^108.0.0"
   }
 }
