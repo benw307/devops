@@ -1,37 +1,16 @@
-// index.js
-const { PubSub } = require('@google-cloud/pubsub');
 const { RunServiceClient } = require('@google-cloud/run');
 const { google } = require('googleapis');
 const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
-
-const projectId = bw-cbv2-sample-1;  // Replace with your actual project ID
-const topicName = 'cloud-run-instance-data'; // Pub/Sub topic name
-const pubsub = new PubSub({ projectId });
-const secretManagerClient = new SecretManagerServiceClient();
-
-async function accessSecretVersion() {
-  const name = 'projects/YOUR_PROJECT_ID/secrets/cloud-run-tracker-sa-key/versions/latest'; //replace with actual secret name
-  const [version] = await secretManagerClient.accessSecretVersion({
-    name: name,
-  });
-
-  const payload = version.payload.data.toString();
-  return payload;
-}
-
+const auth = new google.auth.GoogleAuth({
+  // Scopes can be specified either as an array or as a single, space-delimited string.
+  scopes: ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/spreadsheets']
+});
 
 async function getCloudRunData() {
-  // Access the secret and create auth object
-  const secretValue = await accessSecretVersion();
-  const auth = new google.auth.GoogleAuth({
-    credentials: JSON.parse(secretValue),
-    scopes: ['https://www.googleapis.com/auth/cloud-platform']
-  });
-
   const run = new RunServiceClient({ authClient: await auth.getClient() });
 
   // Replace with your project IDs or use logic to fetch them
-  const projects = ['YOUR_PROJECT_ID_1', 'YOUR_PROJECT_ID_2']; 
+  const projects = ['YOUR_PROJECT_ID_1', 'YOUR_PROJECT_ID_2'];
 
   let totalInstances = 0;
   let totalProjects = 0;
@@ -49,20 +28,30 @@ async function getCloudRunData() {
   return { totalInstances, totalProjects };
 }
 
-async function publishToPubSub(data) {
-  const dataBuffer = Buffer.from(JSON.stringify(data));
-  try {
-    const messageId = await pubsub.topic(topicName).publish(dataBuffer);
-    console.log(`Message ${messageId} published.`);
-  } catch (error) {
-    console.error(`Received error while publishing: ${error.message}`);
-  }
+async function updateGoogleSheet(totalInstances, totalProjects) {
+  const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
+  const spreadsheetId = 'YOUR_SPREADSHEET_ID';
+  const range = 'Sheet1!A2:D';
+
+  const values = [[new Date().toISOString().slice(0, 10), new Date().getHours(), totalProjects, totalInstances]];
+  const resource = {
+    values,
+  };
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId,
+    range,
+    valueInputOption: 'USER_ENTERED',
+    resource,
+  });
 }
 
 async function main() {
   const { totalInstances, totalProjects } = await getCloudRunData();
-  await publishToPubSub({ totalInstances, totalProjects });
+  await updateGoogleSheet(totalInstances, totalProjects);
+  console.log('Data updated in Google Sheets successfully!');
 }
 
 main().catch(console.error);
+
 
