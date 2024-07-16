@@ -5,13 +5,14 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
+  args: 
+    - gcloud # Add this line to specify the gcloud command
     - run
     - services
     - replace
     - cloud-run-tracker
     - --image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA # Use image from Artifact Registry
-    - --region=us-central1
+    - --region=YOUR_REGION
     - --project=$PROJECT_ID
     - --update-env-vars=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
     - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
