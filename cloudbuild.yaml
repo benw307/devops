@@ -1,3 +1,4 @@
+# cloudbuild.yaml
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA', '.']  # Push to Artifact Registry
@@ -16,7 +17,4 @@ steps:
     - --update-env-vars=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
     - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
 images:
-- 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA'  
-options:
-  logging: GCS_ONLY # or leave as the default if you also want Cloud Logging
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # This is the key chang
+- 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA' 
