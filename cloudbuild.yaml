@@ -1,6 +1,6 @@
 # cloudbuild.yaml
 options:
-  logging: GCS_ONLY # or leave as the default if you also want Cloud Logging
+  logging: GCS_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Use regional bucket
 
 steps:
@@ -14,9 +14,9 @@ steps:
     - run
     - services
     - replace
-    - cloud-run-tracker
-    - --image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA
-    - --region=us-central1
+    - cloud-run-tracker  # Name of your Cloud Run service
+    - --image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA # Image URL from Artifact Registry
+    - --region=us-central1 
     - --project=$PROJECT_ID
     - --update-env-vars=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
     - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
