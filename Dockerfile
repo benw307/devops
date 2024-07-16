@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Clear npm cache
+RUN npm cache clean --force 
+
 # Install dependencies
 RUN npm install @google-cloud/run googleapis @google-cloud/secret-manager
 
