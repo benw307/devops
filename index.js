@@ -10,7 +10,7 @@ async function getCloudRunData() {
   const run = new RunServiceClient({ authClient: await auth.getClient() });
 
   // Replace with your project IDs or use logic to fetch them
-  const projects = ['YOUR_PROJECT_ID_1', 'YOUR_PROJECT_ID_2'];
+  const projects = [next24-demo-project];
 
   let totalInstances = 0;
   let totalProjects = 0;
@@ -30,7 +30,7 @@ async function getCloudRunData() {
 
 async function updateGoogleSheet(totalInstances, totalProjects) {
   const sheets = google.sheets({ version: 'v4', auth: await auth.getClient() });
-  const spreadsheetId = 'YOUR_SPREADSHEET_ID';
+  const spreadsheetId = 1sFg82nPo0CFXkw7w-OK4h6OSrqxnx-fzKg-5U-jYrm8;
   const range = 'Sheet1!A2:D';
 
   const values = [[new Date().toISOString().slice(0, 10), new Date().getHours(), totalProjects, totalInstances]];
