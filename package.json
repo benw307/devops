@@ -1,13 +1,14 @@
 {
   "name": "cloud-run-tracker",
   "version": "1.0.0",
-  "description": "Tracks Cloud Run instances and updates Google Sheet",
+  "description": "Tracks Cloud Run instances and writes to Cloud Storage",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "@google-cloud/run": "^3.2.0",
-    "googleapis": "^108.0.0"
+    "googleapis": "^108.0.0",
+    "@google-cloud/secret-manager": "^4.2.0"
   }
 }
