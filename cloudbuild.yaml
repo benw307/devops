@@ -1,7 +1,11 @@
 # cloudbuild.yaml
+options:
+  logging: GCS_ONLY # or leave as the default if you also want Cloud Logging
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Use regional bucket
+
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA', '.']  # Push to Artifact Registry
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -10,10 +14,10 @@ steps:
     - run
     - services
     - replace
-    - cloud-run-tracker # Cloud Run service name
+    - cloud-run-tracker
     - --image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA
-    - --region=us-central1 # Region of Cloud Run service deployment
-    - --project=$PROJECT_ID # Project of Cloud Run service deployment
+    - --region=us-central1
+    - --project=$PROJECT_ID
     - --update-env-vars=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
     - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
 images:
