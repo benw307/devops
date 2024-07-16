@@ -1,22 +1,21 @@
-# Stage 1: Install dependencies
-FROM node:18-alpine AS build
-
-RUN rm -rf /root/.npm/_cacache
-WORKDIR /app
-
-COPY package*.json ./  
-RUN npm install
-
-# Stage 2: Build the final image
+# Use the official Node.js 18 Alpine image
 FROM node:18-alpine
+
+# Set the working directory inside the container
 WORKDIR /app
 
-# Clear npm cache here as well
-RUN npm cache clean --force
+# Copy package.json and package-lock.json (if available)
+COPY package*.json ./
+
+# Install production dependencies (add --only=production if you don't need devDependencies)
 RUN npm install
 
-COPY --from=build /app/node_modules ./node_modules
-COPY index.js ./  # Make sure the path is correct
+# Copy the rest of your application's source code
+COPY . .
 
+# Expose port 8080 (the default for Cloud Run)
 EXPOSE 8080
-CMD ["node", "index.js"]
+
+# Command to start your application
+CMD [ "npm", "start" ]
+
