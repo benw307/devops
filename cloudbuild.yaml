@@ -2,23 +2,9 @@
 options:
   logging: GCS_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Use regional bucket
+  requestedVerifyOption: VERIFIED
 
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA']
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
-    - gcloud
-    - run
-    - services
-    - replace
-    - cloud-run-tracker  # Name of your Cloud Run service
-    - --image=us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA # Image URL from Artifact Registry
-    - --region=us-central1 
-    - --project=$PROJECT_ID
-    - --update-env-vars=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
-    - --set-secrets=GOOGLE_APPLICATION_CREDENTIALS=/secrets/google-application-credentials
-images:
-- 'us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-images/cloud-run-tracker:$COMMIT_SHA' 
+  steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello', '.' ]
+  images: ['us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hellp']
