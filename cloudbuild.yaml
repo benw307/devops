@@ -1,10 +1,13 @@
-# cloudbuild.yaml
+# Top-level fields:
+images: ['us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello']
+
+# Options section:
 options:
   logging: GCS_ONLY
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  # Use regional bucket
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  
   requestedVerifyOption: VERIFIED
 
-  steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello', '.' ]
-  images: ['us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello']
+# Build steps:
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello', '.' ]
