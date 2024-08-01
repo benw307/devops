@@ -18,20 +18,22 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello']
   id: B
+    waitFor:  
+    - A
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
     echo "Hello $_USER"
   id: C
   waitFor:  
-    - A
+    - B
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
     echo "Your project ID is $PROJECT_ID"
   id: D
   waitFor:  
-    - A
+    - C
     
 substitutions:
   _USER: "Google Cloud"
