@@ -23,13 +23,15 @@ steps:
     #!/usr/bin/env bash
     echo "Hello $_USER"
   id: C
-  waitFor: ['-']
+  waitFor:  
+    - A
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
     echo "Your project ID is $PROJECT_ID"
   id: D
-  waitFor: ['-']
+  waitFor:  
+    - A
     
 substitutions:
   _USER: "Google Cloud"
