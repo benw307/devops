@@ -7,7 +7,7 @@ options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  
   requestedVerifyOption: VERIFIED
   pool:
-    name: "projects/bw-cbv2-sample-1/locations/us-central1/workerPools/slow-pool"
+    name: "projects/bw-cbv2-sample-1/locations/us-central1/workerPools/fast-pool"
 
 # Build steps:
 steps:
