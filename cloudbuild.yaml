@@ -14,16 +14,22 @@ options:
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello', '.' ]
+  id: A
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello']
+  id: B
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
     echo "Hello $_USER"
+  id: C
+  waitFor: ['-']
 - name: 'ubuntu'
   script: |
     #!/usr/bin/env bash
     echo "Your project ID is $PROJECT_ID"
+  id: D
+  waitFor: ['-']
     
 substitutions:
   _USER: "Google Cloud"
