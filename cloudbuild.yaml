@@ -6,6 +6,7 @@ options:
   logging: GCS_ONLY
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET  
   requestedVerifyOption: VERIFIED
+  automapSubstitutions: true
   pool:
     name: "projects/bw-cbv2-sample-1/locations/us-central1/workerPools/fast-pool"
 
@@ -15,9 +16,15 @@ steps:
   args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello', '.' ]
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello']
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'gcloud'
-  args: ['compute', 'instances', 'create-with-container', 'my-vm-name', '--container-image', 'us-central1-docker.pkg.dev/bw-cbv2-sample-1/build-provenance/hello']
-  env:
-  - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+- name: 'ubuntu'
+  script: |
+    #!/usr/bin/env bash
+    echo "Hello $_USER"
+- name: 'ubuntu'
+  script: |
+    #!/usr/bin/env bash
+    echo "Your project ID is $PROJECT_ID"
+    
+substitutions:
+  _USER: "Google Cloud"
+
